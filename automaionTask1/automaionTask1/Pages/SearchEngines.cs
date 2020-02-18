@@ -20,5 +20,45 @@ namespace automaionTask1
     {
         public SearchEngines(IWebDriver driver) : base(driver) { }
 
+        protected IWebElement NextPageButton;
+
+        protected string xpathOfSearchedElement;
+
+        protected virtual string folderWithScreenshots { get; set; }
+        public bool FindElementIfExists()
+        {
+            try
+            {
+                driver.FindElement(By.XPath(xpathOfSearchedElement));
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void SearchElement()
+        {
+            while (true)
+            {
+                if (FindElementIfExists())
+                {
+                    IWebElement SearchResult = driver.FindElement(By.XPath("//*[@class='cur']"));
+                    string currentPage = SearchResult.Text;
+                    TestContext.Out.WriteLine(currentPage);
+                    break;
+                }
+                else
+                {
+                    NextPageButton.Click();
+                }
+            }
+        }
+
+        public void SetTheDirectoryWithSaves()
+        {
+
+        }
     }
 }
