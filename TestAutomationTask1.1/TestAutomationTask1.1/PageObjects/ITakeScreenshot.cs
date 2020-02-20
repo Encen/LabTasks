@@ -14,11 +14,14 @@ using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
 
-namespace automaionTask1
+
+namespace automaionTask1.Pages
 {
-    class Rozetka: Ecomerces
+    interface ITakeScreenshot
     {
-        public Rozetka(IWebDriver driver) : base(driver) { }
+
+
+
 
     }
 }

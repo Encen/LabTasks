@@ -13,10 +13,11 @@ using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
+using System.IO;
 
 namespace automaionTask1
 {
-    class SearchEngines: Page
+    class SearchEngines : Page
     {
         public SearchEngines(IWebDriver driver) : base(driver) { }
 
@@ -24,7 +25,12 @@ namespace automaionTask1
 
         protected string xpathOfSearchedElement;
 
-        protected virtual string folderWithScreenshots { get; set; }
+        protected string CurrentDate
+        {
+            get =>
+DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
+        }
+        protected virtual string folderWithScreenshots { get => $"C:\\Users\\{Environment.UserName}\\Desktop\\FolderWithScreens\\{CurrentDate}\\{this.GetType().Name}"; }
         public bool FindElementIfExists()
         {
             try
@@ -58,7 +64,10 @@ namespace automaionTask1
 
         public void SetTheDirectoryWithSaves()
         {
-
+            if (!Directory.Exists(folderWithScreenshots))
+            {
+                Directory.CreateDirectory(folderWithScreenshots);
+            }
         }
     }
 }

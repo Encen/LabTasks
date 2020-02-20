@@ -16,13 +16,9 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
 {
-    class Wikipedia:Page
+    class Rozetka : Ecomerces
     {
-        public Wikipedia(IWebDriver driver) : base(driver) { }
-
-        [FindsBy(How = How.XPath, Using = "//img")]
-        private IWebElement listOfPictures;
-
+        public Rozetka(IWebDriver driver) : base(driver) { }
 
     }
 }

@@ -16,9 +16,13 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
 {
-    class Bing: SearchEngines
+    class Wikipedia : Page
     {
-        public Bing(IWebDriver driver) : base(driver) { }
+        public Wikipedia(IWebDriver driver) : base(driver) { }
+
+        [FindsBy(How = How.XPath, Using = "//*[contains(@id,'mp-upper') or @id='mp-bottom']//img")]
+        private IWebElement listOfPictures;
+
 
     }
 }

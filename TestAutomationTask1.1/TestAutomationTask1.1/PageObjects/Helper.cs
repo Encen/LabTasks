@@ -17,7 +17,7 @@ using OpenQA.Selenium.Support.PageObjects;
 namespace automaionTask1
 
 {
-   public class Helper
+    public class Helper
     {
         protected static IWebDriver driver;
         protected WebDriverWait wait;

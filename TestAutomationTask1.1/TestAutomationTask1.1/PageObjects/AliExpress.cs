@@ -16,8 +16,9 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
 {
-    class Ecomerces: Page
+    class AliExpress : Ecomerces
     {
-        public Ecomerces(IWebDriver driver) : base(driver) { }
+        public AliExpress(IWebDriver driver) : base(driver) { }
+
     }
 }

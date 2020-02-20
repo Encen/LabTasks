@@ -22,8 +22,8 @@ namespace automaionTask1
     {
         public Google(IWebDriver driver) : base(driver) { }
 
-        protected override string folderWithScreenshots
-        { get => $""; }
+        protected override string folderWithScreenshots { get; }
+
         protected string stringToSearch { get; set; }
 
         protected override string currentUrl { get => "https://www.google.com/"; }
@@ -34,9 +34,9 @@ namespace automaionTask1
         [FindsBy(How = How.XPath, Using = "//*[@id='pnnext']")]
         protected new IWebElement NextPageButton;
 
-        [FindsBy(How=How.XPath,Using = "//*[contains(text(),'MTB БАНК')]")]
+        [FindsBy(How = How.XPath, Using = "//*[contains(text(),'MTB БАНК')]")]
         private IWebElement DesiredElement;
 
-        
+
     }
 }

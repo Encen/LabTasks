@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -17,15 +17,8 @@ using OpenQA.Selenium.Support.PageObjects;
 namespace automaionTask1
 {
     [TestFixture]
-    public class UnitTest1:Helper
+    public class UnitTest1 : Helper
     {
-       
-
-
-        
-       
-
-
         [Test]
         public void FacebookLoginCheck()
         {
@@ -41,7 +34,7 @@ namespace automaionTask1
             IWebElement SubmitButton = driver.FindElement(By.XPath("//*[@class='login_form_login_button uiButton uiButtonConfirm']"));
             SubmitButton.Click();
             string expectedURL = driver.Url;
-            Assert.AreNotEqual(url, expectedURL,$"We expect that page redirects to {expectedURL}");
+            Assert.AreNotEqual(url, expectedURL, $"We expect that page redirects to {expectedURL}");
         }
 
         [Test]
@@ -54,7 +47,7 @@ namespace automaionTask1
             Console.WriteLine(TitleName);
             Console.WriteLine(LengthOfTitle);
             string currentURL = driver.Url;
-            Assert.AreEqual(url,currentURL, $"We verify that current page adress is{url}");
+            Assert.AreEqual(url, currentURL, $"We verify that current page adress is{url}");
             string currentPageSource = driver.PageSource;
             int LengthOfPageSource = currentPageSource.Length;
             TestContext.Out.WriteLine(LengthOfPageSource);
@@ -74,8 +67,8 @@ namespace automaionTask1
         [Test]
         public void Exercise3()
         {
-            driver.Manage().Window.Size = new System.Drawing.Size(500, 600);
-            driver.Manage().Window.Position = new System.Drawing.Point(200, 150);
+            driver.Manage().Window.Size = new Size(500, 600);
+            driver.Manage().Window.Position = new Point(200, 150);
             driver.Manage().Window.Maximize();
         }
 
@@ -83,11 +76,11 @@ namespace automaionTask1
         public void GoogleTask()
         {
             url = "https://www.google.com/";
-            string xpath = "//*[contains(text(),'MTB –ë–ê–ù–ö')]";
+            string xpath = "//*[contains(text(),'MTB ¡¿Õ ')]";
             string folderWithScreenshotes = "C:\\Users\\Vladyslav_Kyrianov\\source\\repos\\screens\\screen.png";
             driver.Navigate().GoToUrl(url);
             IWebElement SearchField = driver.FindElement(By.XPath("//*[@id='searchform']//input[@type='text']"));
-            SearchField.SendKeys("–ë–∞–Ω–∫");
+            SearchField.SendKeys("¡‡ÌÍ");
             SearchField.SendKeys(Keys.Return);
             IWebElement NextPageButton = driver.FindElement(By.XPath("//*[@id='pnnext']"));
             while (true)
@@ -105,18 +98,18 @@ namespace automaionTask1
                 }
             }
             var screen = driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-            Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
+            var fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
             fullScreenImage.Save(folderWithScreenshotes);
         }
 
 
         public static bool FindElementIfExists(string elementName)
         {
-            try 
+            try
             {
                 driver.FindElement(By.XPath(elementName));
             }
-            catch(NoSuchElementException) 
+            catch (NoSuchElementException)
             {
                 return false;
             }
@@ -131,8 +124,8 @@ namespace automaionTask1
             ScreenshotMaker screenMaker = new ScreenshotMaker();
             OnlyElementDecorator onlyEleDecorator = new OnlyElementDecorator(screenMaker);
             IList<IWebElement> listOfPictures = driver.FindElements(By.XPath("//img"));
-            
-            for(int i = 0; i<listOfPictures.Count;i++)
+
+            for (int i = 0; i < listOfPictures.Count; i++)
             {
                 string folderWithScreenshotes = $"C:\\Users\\Vladyslav_Kyrianov\\source\\repos\\screens\\screen{i}.png";
                 string xpath = $"(//img)[{i + 1}]";
@@ -147,17 +140,17 @@ namespace automaionTask1
         [Test]
         public void Rozetka()
         {
-           
+
             string minValue = "25000";
             url = "https://rozetka.com.ua/";
             driver.Navigate().GoToUrl(url);
-            IWebElement LaptopsAndComputers = driver.FindElement(By.XPath(("//a[@class='menu-categories__link'][contains(text(),'–ù–æ—É—Ç–±—É–∫–∏ –∏ –∫–æ–º–ø—å—é—Ç–µ—Ä—ã')]")));
+            IWebElement LaptopsAndComputers = driver.FindElement(By.XPath(("//a[@class='menu-categories__link'][contains(text(),'ÕÓÛÚ·ÛÍË Ë ÍÓÏÔ¸˛ÚÂ˚')]")));
             LaptopsAndComputers.Click();
             wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@class='app-rz-footer app-footer']")));
             IWebElement footer = driver.FindElement(By.XPath("//*[@class='app-rz-footer app-footer']"));
             footer.Click();
-            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@alt='–ù–æ—É—Ç–±—É–∫–∏']")));
-            IWebElement Laptops = driver.FindElement(By.XPath("//*[@alt='–ù–æ—É—Ç–±—É–∫–∏']"));
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@alt='ÕÓÛÚ·ÛÍË']")));
+            IWebElement Laptops = driver.FindElement(By.XPath("//*[@alt='ÕÓÛÚ·ÛÍË']"));
             Laptops.Click();
             IWebElement MinValueField = driver.FindElement(By.XPath("//input[@formcontrolname='min']"));
             MinValueField.Clear();
@@ -167,7 +160,7 @@ namespace automaionTask1
             wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy((By.XPath("//*[@class='goods-tile__price-value']"))));
             IList<IWebElement> LaptopPrices = driver.FindElements(By.XPath("//*[@class='goods-tile__price-value']"));
             List<string> prices = new List<string>();
-            
+
             List<int> INTprices = new List<int>();
             foreach (var i in LaptopPrices)
             {
@@ -185,7 +178,7 @@ namespace automaionTask1
                     throw new Exception("filter doesn't work correctly");
                 }
             }
-            
+
         }
         public static string RemoveWhitespace(string input)
         {

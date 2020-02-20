@@ -12,10 +12,13 @@ using OpenQA.Selenium.Support.UI;
 using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
-namespace automaionTask1.Pages
+using OpenQA.Selenium.Support.PageObjects;
+
+namespace automaionTask1
 {
-    class Facebook:Page
+    class Bing : SearchEngines
     {
-        public Facebook(IWebDriver driver) : base(driver) { }
+        public Bing(IWebDriver driver) : base(driver) { }
+
     }
 }
