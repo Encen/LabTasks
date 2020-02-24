@@ -20,5 +20,7 @@ namespace automaionTask1
     {
         public Bing(IWebDriver driver) : base(driver) { }
 
+        protected override string stringToSearch { get; }
+        protected override IWebElement SearchField { get; }
     }
 }

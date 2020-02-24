@@ -17,20 +17,14 @@ using System.IO;
 
 namespace automaionTask1
 {
-    class SearchEngines : Page
+   abstract class SearchEngines : BasePage
     {
         public SearchEngines(IWebDriver driver) : base(driver) { }
 
-        protected IWebElement NextPageButton;
-
-        protected string xpathOfSearchedElement;
-
-        protected string CurrentDate
-        {
-            get =>
-DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
-        }
-        protected virtual string folderWithScreenshots { get => $"C:\\Users\\{Environment.UserName}\\Desktop\\FolderWithScreens\\{CurrentDate}\\{this.GetType().Name}"; }
+        protected abstract string xpathOfSearchedElement { get; }
+        protected  abstract string stringToSearch { get; }
+        protected abstract IWebElement SearchField { get; }
+        protected abstract IWebElement NextPageButton { get; }
         public bool FindElementIfExists()
         {
             try
@@ -44,14 +38,20 @@ DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
             return true;
         }
 
-        public void SearchElement()
+        public void SearchText()
+        {
+            RandomUsefulMethods.GoToPage(currentUrl);
+            SearchField.SendKeys(stringToSearch);
+            SearchField.SendKeys(Keys.Return);
+        }
+        public void SearchElement(string xpath)
         {
             while (true)
             {
                 if (FindElementIfExists())
                 {
-                    IWebElement SearchResult = driver.FindElement(By.XPath("//*[@class='cur']"));
-                    string currentPage = SearchResult.Text;
+                    IWebElement NumberOfPage = driver.FindElement(By.XPath(xpath));
+                    string currentPage = NumberOfPage.Text;
                     TestContext.Out.WriteLine(currentPage);
                     break;
                 }
@@ -62,12 +62,6 @@ DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
             }
         }
 
-        public void SetTheDirectoryWithSaves()
-        {
-            if (!Directory.Exists(folderWithScreenshots))
-            {
-                Directory.CreateDirectory(folderWithScreenshots);
-            }
-        }
+       
     }
 }

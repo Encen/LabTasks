@@ -20,5 +20,24 @@ namespace automaionTask1
     {
         public Rozetka(IWebDriver driver) : base(driver) { }
 
+
+        [FindsBy(How = How.XPath, Using = "//a[@class='menu-categories__link'][contains(text(),'Ноутбуки и компьютеры')]")]
+        private IWebElement LaptopsAndComputers;
+
+        [FindsBy(How = How.XPath, Using = "//*[@class='app-rz-footer app-footer']")]
+        private IWebElement FooterOfThePage;
+
+        [FindsBy(How = How.XPath, Using = "//*[@alt='Ноутбуки']")]
+        private IWebElement Laptops;
+
+        [FindsBy(How = How.XPath, Using = "//input[@formcontrolname='min']")]
+        private IWebElement MinValueField;
+
+        [FindsBy(How = How.XPath, Using = "//input[@formcontrolname='min']")]
+        private IWebElement SubmitFilterButton;
+
+        [FindsBy(How = How.XPath, Using = "//*[@class='goods-tile__price-value']")]
+        private IList <IWebElement> ListOfPrices;
+
     }
 }

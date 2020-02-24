@@ -155,7 +155,7 @@ namespace automaionTask1
             IWebElement MinValueField = driver.FindElement(By.XPath("//input[@formcontrolname='min']"));
             MinValueField.Clear();
             MinValueField.SendKeys(minValue);
-            IWebElement SubmitButton = driver.FindElement(By.XPath("//*[contains(text(),'Ok')][@type='submit']"));
+            IWebElement SubmitButton = driver.FindElement(By.XPath("//input[@formcontrolname='min']"));
             SubmitButton.Click();
             wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy((By.XPath("//*[@class='goods-tile__price-value']"))));
             IList<IWebElement> LaptopPrices = driver.FindElements(By.XPath("//*[@class='goods-tile__price-value']"));

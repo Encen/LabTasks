@@ -16,13 +16,21 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
 {
-    class Wikipedia : Page
+    class Wikipedia : BasePage
     {
         public Wikipedia(IWebDriver driver) : base(driver) { }
 
-        [FindsBy(How = How.XPath, Using = "//*[contains(@id,'mp-upper') or @id='mp-bottom']//img")]
-        private IWebElement listOfPictures;
+        protected override string currentUrl { get => "https://en.wikipedia.org/wiki/Main_Page"; }
+        public override string folderWithScreenshots { get; }
+        private string xpathOfPictures => "//*[contains(@id,'mp-upper') or @id='mp-bottom']//img";
 
+        [FindsBy(How = How.XPath, Using = "xpathOfPictures")]
+        private IList<IWebElement> listOfPictures;
+
+        public void TakeScreenOfElement()
+        {             
+                RandomUsefulMethods.TakeScreenshotOfElement(folderWithScreenshots,listOfPictures,xpathOfPictures);
+        }
 
     }
 }

@@ -13,11 +13,14 @@ using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
+using System.IO;
 
 namespace automaionTask1
 {
-    class Ecomerces : Page
+    class Yahoo : SearchEngines
     {
-        public Ecomerces(IWebDriver driver) : base(driver) { }
+        public Yahoo(IWebDriver driver):base(driver){ }
+
+
     }
 }

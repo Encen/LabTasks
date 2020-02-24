@@ -22,21 +22,31 @@ namespace automaionTask1
     {
         public Google(IWebDriver driver) : base(driver) { }
 
-        protected override string folderWithScreenshots { get; }
+        public override string folderWithScreenshots { get; }
+        protected override string stringToSearch { get=>"Банк";}
 
-        protected string stringToSearch { get; set; }
+        protected override string xpathOfSearchedElement => "//*[contains(text(),'MTB БАНК')]";
 
         protected override string currentUrl { get => "https://www.google.com/"; }
+        string xpathOfPageNumber => "//*[@class='cur']";
 
-        [FindsBy(How = How.XPath, Using = "//*[@id='searchform']//input[@type='text']")]
-        private IWebElement SearchField;
+        protected override IWebElement SearchField => driver.FindElement(By.XPath("//*[@id='searchform']//input[@type='text']"));
 
         [FindsBy(How = How.XPath, Using = "//*[@id='pnnext']")]
         protected new IWebElement NextPageButton;
 
-        [FindsBy(How = How.XPath, Using = "//*[contains(text(),'MTB БАНК')]")]
+        [FindsBy(How = How.XPath, Using = "xpathOfSearchedElement")]
         private IWebElement DesiredElement;
 
+        public void FindElement()
+        {
+            SearchText();
+            SearchElement(xpathOfSearchedElement);
+        }
 
+        public void TakeScreen()
+        {
+            RandomUsefulMethods.TakeScreenshotOfEntirePage(folderWithScreenshots);
+        }
     }
 }

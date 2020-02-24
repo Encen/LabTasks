@@ -13,15 +13,20 @@ using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
+using OpenQA.Selenium.Firefox;
 
+namespace automaionTask1
 
-namespace automaionTask1.Pages
 {
-    interface ITakeScreenshot
+    public class DriverConfig
     {
-
-
-
-
+        public static IWebDriver GetDriver(DriverTypes driverName)
+            => driverName switch
+            {
+                DriverTypes.Chrome => (IWebDriver)new ChromeDriver(),
+                DriverTypes.Firefox => (IWebDriver)new FirefoxDriver(),
+                _ => new ChromeDriver()
+            };
+     
     }
 }

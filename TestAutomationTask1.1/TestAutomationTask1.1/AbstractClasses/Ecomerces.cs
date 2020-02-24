@@ -15,26 +15,15 @@ using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
-
 {
-    public class Helper
+    abstract class Ecomerces : BasePage
     {
-        protected static IWebDriver driver;
-        protected WebDriverWait wait;
+        public Ecomerces(IWebDriver driver) : base(driver) { }
 
-        [SetUp]
-        public void SetUp()
-        {
-            driver = new ChromeDriver();
-            driver.Manage().Window.Maximize();
-            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
-        }
+        List<string> prices;
 
+        List<int> pricesAsInt;
 
-        [TearDown]
-        public void TearDown()
-        {
-            driver.Close();
-        }
+        
     }
 }

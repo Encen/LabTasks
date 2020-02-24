@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -17,33 +18,33 @@ using WDSE.ScreenshotMaker;
 
 namespace automaionTask1
 {
-    public class Page
+    public abstract class BasePage
     {
         protected static IWebDriver driver;
         protected WebDriverWait wait;
-
+        
+        protected string CurrentDate
+        {
+            get =>
+            DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
+        }
+        public virtual string folderWithScreenshots { get => $"C:\\Users\\{Environment.UserName}\\Desktop\\FolderWithScreens\\{CurrentDate}\\{this.GetType().Name}"; }
         protected virtual string currentUrl { get; set; }
-        public Page(IWebDriver _driver)
+        public BasePage(IWebDriver _driver)
         {
             driver = _driver;
             PageFactory.InitElements(driver, this);
         }
 
-        public void GoToPage(string url)
+        public void SetTheDirectoryWithSaves()
         {
-            driver.Navigate().GoToUrl(url);
+            if (!Directory.Exists(folderWithScreenshots))
+            {
+                Directory.CreateDirectory(folderWithScreenshots);
+            }
         }
 
-        public void TakeScreenshotOfEntirePage(string filePath)
-        {
-            var screen = driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-            Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
-            fullScreenImage.Save(filePath);
-        }
 
-        public void TakeScreenshotOfElement(string filePath)
-        {
 
-        }
     }
 }
