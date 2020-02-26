@@ -21,15 +21,18 @@ namespace automaionTask1
         public Wikipedia(IWebDriver driver) : base(driver) { }
 
         protected override string currentUrl { get => "https://en.wikipedia.org/wiki/Main_Page"; }
-        public override string folderWithScreenshots { get; }
+        public override string folderWithScreenshots { get => base.folderWithScreenshots; }
         private string xpathOfPictures => "//*[contains(@id,'mp-upper') or @id='mp-bottom']//img";
+        private IList<IWebElement> listOfPictures => driver.FindElements(By.XPath(xpathOfPictures));
 
-        [FindsBy(How = How.XPath, Using = "xpathOfPictures")]
-        private IList<IWebElement> listOfPictures;
-
-        public void TakeScreenOfElement()
-        {             
-                RandomUsefulMethods.TakeScreenshotOfElement(folderWithScreenshots,listOfPictures,xpathOfPictures);
+        public void GoToWikiMainPage()
+        {
+            RandomUsefulMethods.GoToPage(currentUrl);
+        }
+        public void TakeScreenshotOfElements()
+        {
+            SetTheDirectoryWithSaves();
+            RandomUsefulMethods.TakeScreenshotOfElement(folderWithScreenshots,listOfPictures,xpathOfPictures);
         }
 
     }

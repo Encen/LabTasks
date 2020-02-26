@@ -22,30 +22,24 @@ namespace automaionTask1
     {
         public Google(IWebDriver driver) : base(driver) { }
 
-        public override string folderWithScreenshots { get; }
+        public override string  folderWithScreenshots { get => base.folderWithScreenshots; } 
         protected override string stringToSearch { get=>"Банк";}
-
-        protected override string xpathOfSearchedElement => "//*[contains(text(),'MTB БАНК')]";
-
+        protected override string xpathOfSearchedElement { get => "//*[contains(text(),'MTB БАНК')]"; }
         protected override string currentUrl { get => "https://www.google.com/"; }
-        string xpathOfPageNumber => "//*[@class='cur']";
-
+        protected override string xpathOfPageNumber => "//*[@class='cur']";
         protected override IWebElement SearchField => driver.FindElement(By.XPath("//*[@id='searchform']//input[@type='text']"));
-
-        [FindsBy(How = How.XPath, Using = "//*[@id='pnnext']")]
-        protected new IWebElement NextPageButton;
-
-        [FindsBy(How = How.XPath, Using = "xpathOfSearchedElement")]
-        private IWebElement DesiredElement;
+        protected override IWebElement NextPageButton { get => driver.FindElement(By.XPath("//*[@id='pnnext']")); }
+        protected override string xpathOfNextPageButton => "//*[@id='pnnext']";
 
         public void FindElement()
         {
             SearchText();
-            SearchElement(xpathOfSearchedElement);
+            SearchElement(xpathOfPageNumber);
         }
 
         public void TakeScreen()
         {
+            SetTheDirectoryWithSaves();
             RandomUsefulMethods.TakeScreenshotOfEntirePage(folderWithScreenshots);
         }
     }

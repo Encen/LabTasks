@@ -19,8 +19,8 @@ namespace automaionTask1
 {
     public class Helper
     {
-        protected static IWebDriver driver;
-        protected WebDriverWait wait;
+        public static IWebDriver driver { get; set; }
+        public static WebDriverWait wait;
 
         [SetUp]
         public void SetUp()

@@ -24,7 +24,10 @@ namespace automaionTask1
         protected abstract string xpathOfSearchedElement { get; }
         protected  abstract string stringToSearch { get; }
         protected abstract IWebElement SearchField { get; }
+        protected abstract string xpathOfNextPageButton { get; }
         protected abstract IWebElement NextPageButton { get; }
+        protected abstract string xpathOfPageNumber { get; }
+
         public bool FindElementIfExists()
         {
             try
@@ -37,7 +40,18 @@ namespace automaionTask1
             }
             return true;
         }
-
+        public bool TryToFindNextButton()
+        {
+            try
+            {
+                driver.FindElement(By.XPath(xpathOfNextPageButton));
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+            return true;
+        }
         public void SearchText()
         {
             RandomUsefulMethods.GoToPage(currentUrl);
@@ -61,7 +75,6 @@ namespace automaionTask1
                 }
             }
         }
-
-       
-    }
+   }       
 }
+

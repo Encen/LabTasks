@@ -26,7 +26,7 @@ namespace automaionTask1
         protected string CurrentDate
         {
             get =>
-            DateTime.Now.ToString("dd.mm.yyy").Replace('/', '\\');
+            DateTime.Now.ToString("dd.MM.yyy").Replace('/', '\\');
         }
         public virtual string folderWithScreenshots { get => $"C:\\Users\\{Environment.UserName}\\Desktop\\FolderWithScreens\\{CurrentDate}\\{this.GetType().Name}"; }
         protected virtual string currentUrl { get; set; }

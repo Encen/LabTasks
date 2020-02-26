@@ -20,7 +20,14 @@ namespace automaionTask1
     {
         public Bing(IWebDriver driver) : base(driver) { }
 
+        protected override IWebElement NextPageButton => throw new NotImplementedException();
+        protected override string xpathOfSearchedElement => throw new NotImplementedException();
+
         protected override string stringToSearch { get; }
         protected override IWebElement SearchField { get; }
+
+        protected override string xpathOfPageNumber => throw new NotImplementedException();
+
+        protected override string xpathOfNextPageButton => throw new NotImplementedException();
     }
 }

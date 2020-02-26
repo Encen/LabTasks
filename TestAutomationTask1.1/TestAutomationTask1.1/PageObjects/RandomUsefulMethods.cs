@@ -17,12 +17,9 @@ using OpenQA.Selenium.Support.PageObjects;
 
 namespace automaionTask1
 {
-    public static class RandomUsefulMethods
+    public static class RandomUsefulMethods 
     {
-
-        static IWebDriver driver;
-
-
+       
         public static string RemoveWhitespace(string input)
         {
             return new string(input.ToCharArray()
@@ -32,13 +29,19 @@ namespace automaionTask1
 
         public static void GoToPage(string url)
         {
-            driver.Navigate().GoToUrl(url);
+           
+            Helper.driver.Navigate().GoToUrl(url);
         }
 
         public static void TakeScreenshotOfEntirePage(string filePath)
         {
             string nameOfFile = $"{filePath}\\screenOfEntirePage.png";
-            var screen = driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
+            
+            var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
+            if (IfByteReplaced())
+            {
+                ByteReplace(screen);
+            }
             Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
             fullScreenImage.Save(nameOfFile);
         }
@@ -47,16 +50,40 @@ namespace automaionTask1
 
         public static void TakeScreenshotOfElement(string folderWithScreenshotes,IList<IWebElement> LocatorOfImages,string xpathOfImages)
         {
+            ScreenshotMaker screenMaker = new ScreenshotMaker();
+            OnlyElementDecorator onlyEleDecorator = new OnlyElementDecorator(screenMaker);
             for (int i = 0; i < LocatorOfImages.Count; i++)
             {
-                ScreenshotMaker screenMaker = new ScreenshotMaker();
-                OnlyElementDecorator onlyEleDecorator = new OnlyElementDecorator(screenMaker);
-                By by = By.XPath($"xpathOfImages{i + 1}");
+                
+                By by = By.XPath($"({xpathOfImages})[{i + 1}]");
                 onlyEleDecorator.SetElement(by);
-                var ScreenInByteArr = driver.TakeScreenshot(onlyEleDecorator);
+                
+                byte[] ScreenInByteArr = Helper.driver.TakeScreenshot(onlyEleDecorator);
                 Image ElementScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(ScreenInByteArr));
                 ElementScreenImage.Save($"{folderWithScreenshotes}\\screen{i+1}.png");
             }
+        }
+
+        public static byte[] ByteReplace(byte[] kek)
+        {
+            string str = System.Text.Encoding.Default.GetString(kek);
+            string ReplacedString = str.Replace("$", "document");
+            kek = System.Text.Encoding.UTF8.GetBytes(ReplacedString);
+            return kek;
+        }
+
+        public static bool IfByteReplaced()
+        {
+            try
+            {
+                var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
+
+            }
+            catch (OpenQA.Selenium.WebDriverException)
+            {
+                return true;
+            }
+            return false;
         }
 
       

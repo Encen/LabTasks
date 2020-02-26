@@ -19,25 +19,31 @@ namespace automaionTask1
     class Rozetka : Ecomerces
     {
         public Rozetka(IWebDriver driver) : base(driver) { }
+        protected override string currentUrl { get => "https://rozetka.com.ua/"; }
 
+        protected override IWebElement DesiredCategory => driver.FindElement(By.XPath("//a[@class='menu-categories__link'][contains(text(),'Ноутбуки и компьютеры')]"));
+        protected override IWebElement DesiredSubcategory => driver.FindElement(By.XPath("//*[@alt='Ноутбуки']"));
+        protected override IWebElement MinValueField => driver.FindElement(By.XPath("//input[@formcontrolname='min']"));
+        protected override IWebElement SubmitFilterButton => driver.FindElement(By.XPath("//*[@type='submit']"));
+        protected override IList<IWebElement> FoundedElements => driver.FindElements(By.XPath("//*[@class='goods-tile__price-value']"));
+        protected override string XpathOfFoundedElements => "//*[@class='goods-tile__price-value']";
+        protected override int priceForFilter => 25000;
 
-        [FindsBy(How = How.XPath, Using = "//a[@class='menu-categories__link'][contains(text(),'Ноутбуки и компьютеры')]")]
-        private IWebElement LaptopsAndComputers;
+        private IWebElement FooterOfThePage => driver.FindElement(By.XPath("//*[@class='app-rz-footer app-footer']"));
+        
 
-        [FindsBy(How = How.XPath, Using = "//*[@class='app-rz-footer app-footer']")]
-        private IWebElement FooterOfThePage;
-
-        [FindsBy(How = How.XPath, Using = "//*[@alt='Ноутбуки']")]
-        private IWebElement Laptops;
-
-        [FindsBy(How = How.XPath, Using = "//input[@formcontrolname='min']")]
-        private IWebElement MinValueField;
-
-        [FindsBy(How = How.XPath, Using = "//input[@formcontrolname='min']")]
-        private IWebElement SubmitFilterButton;
-
-        [FindsBy(How = How.XPath, Using = "//*[@class='goods-tile__price-value']")]
-        private IList <IWebElement> ListOfPrices;
-
+        public void SearchAndApplyFilter()
+        {
+            ChooseCategory();
+            Helper.wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@class='app-rz-footer app-footer']")));
+            FooterOfThePage.Click();
+            ChooseSubcategory();
+           
+        }
+        public void CheckFilterWorksCorrectly()
+        {
+            ApplyFilter();
+            CheckFilterWork();
+        }
     }
 }

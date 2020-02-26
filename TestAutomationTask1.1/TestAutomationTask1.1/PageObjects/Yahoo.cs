@@ -21,6 +21,25 @@ namespace automaionTask1
     {
         public Yahoo(IWebDriver driver):base(driver){ }
 
+        protected override string currentUrl { get => "https://www.yahoo.com/"; }
+        protected override IWebElement SearchField => driver.FindElement(By.XPath("//input[@id='header-search-input']"));
+        protected override string xpathOfSearchedElement => "//a[contains(text(),'РАНАРА')]";
+        protected override string xpathOfNextPageButton => "//*[@class='next']";
+        protected override IWebElement NextPageButton => driver.FindElement(By.XPath("//*[@class='next']"));
+        protected override string stringToSearch => "ветеринарная клиника";
+        protected override string xpathOfPageNumber => "//*[@class='compPagination']//strong";
 
+        public void FindElement()
+        {
+            SearchText();
+            SearchElement(xpathOfPageNumber);
+        }
+
+        public void TakeScreen()
+        {
+            SetTheDirectoryWithSaves();
+            RandomUsefulMethods.TakeScreenshotOfEntirePage(folderWithScreenshots);
+        }
     }
 }
+
