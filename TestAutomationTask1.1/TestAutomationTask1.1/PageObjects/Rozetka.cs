@@ -34,6 +34,7 @@ namespace automaionTask1
 
         public void SearchAndApplyFilter()
         {
+            OpenPage();
             ChooseCategory();
             Helper.wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@class='app-rz-footer app-footer']")));
             FooterOfThePage.Click();

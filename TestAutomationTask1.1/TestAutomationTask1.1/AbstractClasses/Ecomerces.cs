@@ -37,9 +37,13 @@ namespace automaionTask1
 
         List<int> pricesAsInt;
 
-        public void ChooseCategory()
+        public void OpenPage()
         {
             RandomUsefulMethods.GoToPage(currentUrl);
+        }
+        public void ChooseCategory()
+        {
+           
             DesiredCategory.Click();
             
         }

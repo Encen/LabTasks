@@ -13,37 +13,30 @@ using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
-
+using System.IO;
 
 namespace automaionTask1
 {
     public static class RandomUsefulMethods 
     {
-       
         public static string RemoveWhitespace(string input)
         {
             return new string(input.ToCharArray()
                 .Where(c => !Char.IsWhiteSpace(c))
                 .ToArray());
         }
-
         public static void GoToPage(string url)
         {
-           
             Helper.driver.Navigate().GoToUrl(url);
         }
 
         public static void TakeScreenshotOfEntirePage(string filePath)
         {
             string nameOfFile = $"{filePath}\\screenOfEntirePage.png";
-            
-            var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-            if (IfByteReplaced())
-            {
-                ByteReplace(screen);
-            }
-            Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
-            fullScreenImage.Save(nameOfFile);
+            //var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
+             File.WriteAllBytes(nameOfFile, ScreenshotsTaker.TakeScreen(Helper.driver));
+            //Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
+            //fullScreenImage.Save(nameOfFile);
         }
 
      
@@ -53,11 +46,9 @@ namespace automaionTask1
             ScreenshotMaker screenMaker = new ScreenshotMaker();
             OnlyElementDecorator onlyEleDecorator = new OnlyElementDecorator(screenMaker);
             for (int i = 0; i < LocatorOfImages.Count; i++)
-            {
-                
+            {                
                 By by = By.XPath($"({xpathOfImages})[{i + 1}]");
                 onlyEleDecorator.SetElement(by);
-                
                 byte[] ScreenInByteArr = Helper.driver.TakeScreenshot(onlyEleDecorator);
                 Image ElementScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(ScreenInByteArr));
                 ElementScreenImage.Save($"{folderWithScreenshotes}\\screen{i+1}.png");
@@ -77,7 +68,6 @@ namespace automaionTask1
             try
             {
                 var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-
             }
             catch (OpenQA.Selenium.WebDriverException)
             {
@@ -86,7 +76,25 @@ namespace automaionTask1
             return false;
         }
 
-      
+        public static class ScreenshotsTaker
+        {
+            private const int AttemptCount = 3;
+            public static byte[] TakeScreen(IWebDriver driver)
+            {
+                var shotTaker = driver as ITakesScreenshot;
+                if (shotTaker == null)
+                    throw new NotSupportedException();
+                for (var i = 0; i < AttemptCount; ++i)
+                {
+                    byte[] bytes = shotTaker.GetScreenshot().AsByteArray;
+                    if (bytes != null && bytes.Length > 0)
+                    {
+                        return bytes;
+                    }
+                }
+                throw new InvalidOperationException("Web driver failed to take screenshot");
+            }
+        }
     }
 }
 

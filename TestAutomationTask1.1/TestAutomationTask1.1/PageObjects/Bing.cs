@@ -20,14 +20,25 @@ namespace automaionTask1
     {
         public Bing(IWebDriver driver) : base(driver) { }
 
-        protected override IWebElement NextPageButton => throw new NotImplementedException();
-        protected override string xpathOfSearchedElement => throw new NotImplementedException();
+        protected override string currentUrl => "https://www.bing.com/";
+        protected override string xpathOfNextPageButton => "//*[@title='Next page']";
+        protected override IWebElement NextPageButton => driver.FindElement(By.XPath("//*[@title='Next page']"));
+        protected override string stringToSearch => "национальный парк";
+        protected override string xpathOfSearchedElement => "//*[contains(text(),'Лахемаа')]";
+        protected override IWebElement SearchField => driver.FindElement(By.XPath("//input[@id='sb_form_q']"));
+        protected override string xpathOfPageNumber => "//*[@class='sb_pagS sb_pagS_bp b_widePag sb_bp']";
 
-        protected override string stringToSearch { get; }
-        protected override IWebElement SearchField { get; }
+        public void FindElement()
+        {
+            SearchText();
+            SearchElement(xpathOfPageNumber);
+        }
 
-        protected override string xpathOfPageNumber => throw new NotImplementedException();
+        public void TakeScreen()
+        {
+            SetTheDirectoryWithSaves();
+            RandomUsefulMethods.TakeScreenshotOfEntirePage(folderWithScreenshots);
+        }
 
-        protected override string xpathOfNextPageButton => throw new NotImplementedException();
     }
 }
