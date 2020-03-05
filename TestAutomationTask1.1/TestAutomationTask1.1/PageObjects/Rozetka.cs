@@ -19,8 +19,8 @@ namespace automaionTask1
     class Rozetka : Ecomerces
     {
         public Rozetka(IWebDriver driver) : base(driver) { }
-        protected override string currentUrl { get => "https://rozetka.com.ua/"; }
 
+        protected override string currentUrl { get => "https://rozetka.com.ua/"; }
         protected override IWebElement DesiredCategory => driver.FindElement(By.XPath("//a[@class='menu-categories__link'][contains(text(),'Ноутбуки и компьютеры')]"));
         protected override IWebElement DesiredSubcategory => driver.FindElement(By.XPath("//*[@alt='Ноутбуки']"));
         protected override IWebElement MinValueField => driver.FindElement(By.XPath("//input[@formcontrolname='min']"));
@@ -28,9 +28,9 @@ namespace automaionTask1
         protected override IList<IWebElement> FoundedElements => driver.FindElements(By.XPath("//*[@class='goods-tile__price-value']"));
         protected override string XpathOfFoundedElements => "//*[@class='goods-tile__price-value']";
         protected override int priceForFilter => 25000;
-
         private IWebElement FooterOfThePage => driver.FindElement(By.XPath("//*[@class='app-rz-footer app-footer']"));
-        
+        protected override IWebElement SearchField => throw new NotImplementedException();
+        protected override IWebElement SubmitSearchButton => throw new NotImplementedException();
 
         public void SearchAndApplyFilter()
         {
@@ -39,7 +39,6 @@ namespace automaionTask1
             Helper.wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@class='app-rz-footer app-footer']")));
             FooterOfThePage.Click();
             ChooseSubcategory();
-           
         }
         public void CheckFilterWorksCorrectly()
         {

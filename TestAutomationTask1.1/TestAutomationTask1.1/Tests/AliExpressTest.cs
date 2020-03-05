@@ -27,7 +27,7 @@ namespace automaionTask1
             aliExpress.OpenMainPage();
             aliExpress.closeAd();
             aliExpress.SignIn();
-            aliExpress.SearchAndApplyFilter();
+            aliExpress.SearchDesiredComponent();
             aliExpress.CheckFilterWorksCorrectly();
         }
     }

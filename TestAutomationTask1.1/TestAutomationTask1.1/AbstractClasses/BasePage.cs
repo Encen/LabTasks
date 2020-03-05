@@ -35,7 +35,6 @@ namespace automaionTask1
             driver = _driver;
             PageFactory.InitElements(driver, this);
         }
-
         public void SetTheDirectoryWithSaves()
         {
             if (!Directory.Exists(folderWithScreenshots))

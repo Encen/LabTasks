@@ -19,8 +19,8 @@ namespace automaionTask1
 {
     public class Helper
     {
-        public static IWebDriver driver { get; set; }
-        public static WebDriverWait wait;
+        internal static IWebDriver driver { get; set; }
+        internal static WebDriverWait wait;
 
         [SetUp]
         public void SetUp()
@@ -29,8 +29,6 @@ namespace automaionTask1
             driver.Manage().Window.Maximize();
             wait = new WebDriverWait(driver, new TimeSpan(0, 0, 10));
         }
-
-
         [TearDown]
         public void TearDown()
         {

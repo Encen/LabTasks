@@ -13,6 +13,7 @@ using WDSE;
 using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Drawing.Imaging;
 
 namespace automaionTask1
 {
@@ -27,18 +28,18 @@ namespace automaionTask1
         protected override string xpathOfSearchedElement => "//*[contains(text(),'Лахемаа')]";
         protected override IWebElement SearchField => driver.FindElement(By.XPath("//input[@id='sb_form_q']"));
         protected override string xpathOfPageNumber => "//*[@class='sb_pagS sb_pagS_bp b_widePag sb_bp']";
+        protected IList<IWebElement> FullPage=> driver.FindElements(By.XPath("//*[@onload='if(_w.lb)lb();']"));
+        protected string XpathOfFullPage => "//*[@onload='if(_w.lb)lb();']";
 
         public void FindElement()
         {
             SearchText();
             SearchElement(xpathOfPageNumber);
         }
-
         public void TakeScreen()
         {
             SetTheDirectoryWithSaves();
             RandomUsefulMethods.TakeScreenshotOfEntirePage(folderWithScreenshots);
         }
-
     }
 }

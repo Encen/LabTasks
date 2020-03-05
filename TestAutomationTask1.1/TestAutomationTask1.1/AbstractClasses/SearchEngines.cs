@@ -58,19 +58,20 @@ namespace automaionTask1
             SearchField.SendKeys(stringToSearch);
             SearchField.SendKeys(Keys.Return);
         }
-        public void SearchElement(string xpath)
+        public void SearchElement(string xpathOfPageNumber)
         {
             while (true)
             {
                 if (FindElementIfExists())
                 {
-                    IWebElement NumberOfPage = driver.FindElement(By.XPath(xpath));
+                    IWebElement NumberOfPage = driver.FindElement(By.XPath(xpathOfPageNumber));
                     string currentPage = NumberOfPage.Text;
                     TestContext.Out.WriteLine(currentPage);
                     break;
                 }
                 else
                 {
+                    Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(xpathOfNextPageButton)));
                     NextPageButton.Click();
                 }
             }

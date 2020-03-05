@@ -34,7 +34,6 @@ namespace automaionTask1
             SearchText();
             SearchElement(xpathOfPageNumber);
         }
-
         public void TakeScreen()
         {
             SetTheDirectoryWithSaves();

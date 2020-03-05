@@ -14,6 +14,7 @@ using WDSE.Decorators;
 using WDSE.ScreenshotMaker;
 using OpenQA.Selenium.Support.PageObjects;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace automaionTask1
 {
@@ -25,22 +26,16 @@ namespace automaionTask1
                 .Where(c => !Char.IsWhiteSpace(c))
                 .ToArray());
         }
+        public static string RemoveWhitespaceAndDash(string input)
+        {
+            return new string (input.ToCharArray()
+                .Where(c => (!Char.IsPunctuation(c) && !Char.IsWhiteSpace(c)))
+                .ToArray()).Substring(0,5);
+        }
         public static void GoToPage(string url)
         {
             Helper.driver.Navigate().GoToUrl(url);
         }
-
-        public static void TakeScreenshotOfEntirePage(string filePath)
-        {
-            string nameOfFile = $"{filePath}\\screenOfEntirePage.png";
-            //var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-             File.WriteAllBytes(nameOfFile, ScreenshotsTaker.TakeScreen(Helper.driver));
-            //Image fullScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(screen));
-            //fullScreenImage.Save(nameOfFile);
-        }
-
-     
-
         public static void TakeScreenshotOfElement(string folderWithScreenshotes,IList<IWebElement> LocatorOfImages,string xpathOfImages)
         {
             ScreenshotMaker screenMaker = new ScreenshotMaker();
@@ -53,48 +48,93 @@ namespace automaionTask1
                 Image ElementScreenImage = (Bitmap)((new ImageConverter()).ConvertFrom(ScreenInByteArr));
                 ElementScreenImage.Save($"{folderWithScreenshotes}\\screen{i+1}.png");
             }
-        }
-
-        public static byte[] ByteReplace(byte[] kek)
+        }      
+        public static Bitmap GetEntireScreenshot()
         {
-            string str = System.Text.Encoding.Default.GetString(kek);
-            string ReplacedString = str.Replace("$", "document");
-            kek = System.Text.Encoding.UTF8.GetBytes(ReplacedString);
-            return kek;
-        }
-
-        public static bool IfByteReplaced()
-        {
+            Bitmap stitchedImage = null;
             try
             {
-                var screen = Helper.driver.TakeScreenshot(new VerticalCombineDecorator(new ScreenshotMaker()));
-            }
-            catch (OpenQA.Selenium.WebDriverException)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static class ScreenshotsTaker
-        {
-            private const int AttemptCount = 3;
-            public static byte[] TakeScreen(IWebDriver driver)
-            {
-                var shotTaker = driver as ITakesScreenshot;
-                if (shotTaker == null)
-                    throw new NotSupportedException();
-                for (var i = 0; i < AttemptCount; ++i)
+                long totalwidth1 = (long)((IJavaScriptExecutor)Helper.driver).ExecuteScript("return document.body.offsetWidth");//documentElement.scrollWidth");
+                long totalHeight1 = (long)((IJavaScriptExecutor)Helper.driver).ExecuteScript("return  document.body.parentNode.scrollHeight");
+                int totalWidth = (int)totalwidth1;
+                int totalHeight = (int)totalHeight1;
+                // Get the Size of the Viewport
+                long viewportWidth1 = (long)((IJavaScriptExecutor)Helper.driver).ExecuteScript("return document.body.clientWidth");//documentElement.scrollWidth");
+                long viewportHeight1 = (long)((IJavaScriptExecutor)Helper.driver).ExecuteScript("return window.innerHeight");//documentElement.scrollWidth");
+                int viewportWidth = (int)viewportWidth1;
+                int viewportHeight = (int)viewportHeight1;
+                // Split the Screen in multiple Rectangles
+                List<Rectangle> rectangles = new List<Rectangle>();
+                // Loop until the Total Height is reached
+                for (int i = 0; i < totalHeight; i += viewportHeight)
                 {
-                    byte[] bytes = shotTaker.GetScreenshot().AsByteArray;
-                    if (bytes != null && bytes.Length > 0)
+                    int newHeight = viewportHeight;
+                    // Fix if the Height of the Element is too big
+                    if (i + viewportHeight > totalHeight)
                     {
-                        return bytes;
+                        newHeight = totalHeight - i;
+                    }
+                    // Loop until the Total Width is reached
+                    for (int ii = 0; ii < totalWidth; ii += viewportWidth)
+                    {
+                        int newWidth = viewportWidth;
+                        // Fix if the Width of the Element is too big
+                        if (ii + viewportWidth > totalWidth)
+                        {
+                            newWidth = totalWidth - ii;
+                        }
+                        // Create and add the Rectangle
+                        Rectangle currRect = new Rectangle(ii, i, newWidth, newHeight);
+                        rectangles.Add(currRect);
                     }
                 }
-                throw new InvalidOperationException("Web driver failed to take screenshot");
+                // Build the Image
+                stitchedImage = new Bitmap(totalWidth, totalHeight);
+                // Get all Screenshots and stitch them together
+                Rectangle previous = Rectangle.Empty;
+                foreach (var rectangle in rectangles)
+                {
+                    // Calculate the Scrolling (if needed)
+                    if (previous != Rectangle.Empty)
+                    {
+                        int xDiff = rectangle.Right - previous.Right;
+                        int yDiff = rectangle.Bottom - previous.Bottom;
+                        // Scroll
+                        //selenium.RunScript(String.Format("window.scrollBy({0}, {1})", xDiff, yDiff));
+                        ((IJavaScriptExecutor)Helper.driver).ExecuteScript(String.Format("window.scrollBy({0}, {1})", xDiff, yDiff));
+                        System.Threading.Thread.Sleep(200);
+                    }
+                    // Take Screenshot
+                    var screenshot = ((ITakesScreenshot)Helper.driver).GetScreenshot();
+                    // Build an Image out of the Screenshot
+                    Image screenshotImage;
+                    using (MemoryStream memStream = new MemoryStream(screenshot.AsByteArray))
+                    {
+                        screenshotImage = Image.FromStream(memStream);
+                    }
+                    // Calculate the Source Rectangle
+                    Rectangle sourceRectangle = new Rectangle(viewportWidth - rectangle.Width, viewportHeight - rectangle.Height, rectangle.Width, rectangle.Height);
+                    // Copy the Image
+                    using (Graphics g = Graphics.FromImage(stitchedImage))
+                    {
+                        g.DrawImage(screenshotImage, rectangle, sourceRectangle, GraphicsUnit.Pixel);
+                    }
+                    // Set the Previous Rectangle
+                    previous = rectangle;
+                }
             }
+            catch (Exception ex)
+            {
+                // handle
+            }
+            return stitchedImage;
         }
+        public static void TakeScreenshotOfEntirePage(string filePath)
+        {
+            string nameOfFile = $"{filePath}\\screenOfEntirePage.jpeg";
+            RandomUsefulMethods.GetEntireScreenshot().Save(nameOfFile,ImageFormat.Jpeg);
+        }
+
     }
 }
 

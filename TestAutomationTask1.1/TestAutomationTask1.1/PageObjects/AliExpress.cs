@@ -22,41 +22,51 @@ namespace automaionTask1
 
         protected override string currentUrl => "https://aliexpress.ru/";
         protected IWebElement NewUserNotificaiton => driver.FindElement(By.XPath("//*[@class='newuser-container']"));
-        protected override IWebElement DesiredCategory => driver.FindElement(By.XPath("//*[contains(text(), 'Компьютеры и оргтехника')]"));
+        protected override IWebElement DesiredCategory => driver.FindElement(By.XPath("//*[contains(text(), 'Компьютеры и офис')]"));
         protected override IWebElement DesiredSubcategory => driver.FindElement(By.XPath("//a[contains(text(), 'Ноутбуки')] "));
-        protected override IWebElement MinValueField => driver.FindElement(By.XPath("//*[@class='next-input next-small min-price']"));
+        protected override IWebElement MinValueField => driver.FindElement(By.XPath("//*[@placeholder='мин']"));
         protected override IWebElement SubmitFilterButton => driver.FindElement(By.XPath("//*[@class='ui-button narrow-go']"));
         protected IWebElement MyProfile => driver.FindElement(By.XPath("//*[@class='ng-item nav-pinfo-item nav-user-account']"));
-        protected IWebElement SignInButton => driver.FindElement(By.XPath(".//*[@class='sign-btn']")); 
-        protected IWebElement LoginField => driver.FindElement(By.XPath(".//*[@id='fm-login-id']"));
+        protected IWebElement SignInButton => driver.FindElement(By.XPath("//*[@class='sign-btn']")); 
+        protected IWebElement LoginField => driver.FindElement(By.XPath("//*[@id='fm-login-id']"));
         protected IWebElement PasswordField => driver.FindElement(By.XPath("//*[@id='fm-login-password']"));
         protected IWebElement closeAdButton => driver.FindElement(By.XPath("//*[@class='close-layer']"));
+        protected IWebElement IFrame => driver.FindElement(By.XPath("//iframe[@id='alibaba-login-box']"));
+        protected IWebElement SubmitLoginButton => driver.FindElement(By.XPath("//*[@type='submit']"));
+        protected override IWebElement SearchField => driver.FindElement(By.XPath("//input[@class='search-key']"));
+        protected override IWebElement SubmitSearchButton => driver.FindElement(By.XPath("//input[@class='search-key']"));
         protected override string XpathOfFoundedElements => "//*[@class='price-current']";
-        protected override IList<IWebElement> FoundedElements => driver.FindElements(By.XPath("//*[@class='price-current']"));
+        protected override IList<IWebElement> FoundedElements => driver.FindElements(By.XPath("//*[@class='search-button']"));
         protected string Login => "kv4jobszxc@gmail.com";
         protected string Password => "password";
+        protected string ToSearch => "Ноутбук";
         protected override int priceForFilter => 25000;
 
+        
 
         public void OpenMainPage()
         {
             OpenPage();
         }
-        public void SearchAndApplyFilter()
+        public void SearchDesiredComponent()
         {
-            ChooseCategory();
-            ChooseSubcategory();
+            closeAd();
+            closeAd();
+            SearchCategory(ToSearch);
+            closeAd();
         }
         public void CheckFilterWorksCorrectly()
         {
+            closeAd();
+            Helper.wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@placeholder='мин']")));
             ApplyFilter();
             CheckFilterWork();
         }
-
         public void closeAd()
         {
             if (IsAdExist())
             {
+                Helper.wait.Until(ExpectedConditions.ElementToBeClickable(closeAdButton));
                 closeAdButton.Click();
             }
         }
@@ -64,7 +74,7 @@ namespace automaionTask1
         {    
             try
             {
-                Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@class='newuser-container']")));
+                //Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@class='newuser-container']")));
                 driver.FindElement(By.XPath("//*[@class='newuser-container']"));
             }
             catch (NoSuchElementException)
@@ -73,17 +83,25 @@ namespace automaionTask1
             }
             return true;
         }
-
+        public void SingInClick()
+        {
+            SignInButton.Click();
+            if (SignInButton.Displayed)
+            {
+                SingInClick();
+            }
+        }
         public void SignIn()
         {
-            
             Helper.wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@class='user-account-port']")));
             new Actions(driver).MoveToElement(MyProfile);
+            closeAd();
             MyProfile.Click();
             new Actions(driver).MoveToElement(SignInButton);
             Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(".//*[@class='sign-btn']")));
-            SignInButton.Click();
-            Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@class='ui-window ui-window-normal ui-window-transition pc-dialog tel-dialog']")));
+            SingInClick();
+            Helper.wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//iframe[@id='alibaba-login-box']")));
+            driver.SwitchTo().Frame(IFrame);
             Helper.wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath(".//*[@id='fm-login-id']")));
             LoginField.Click();
             LoginField.Clear();
@@ -91,6 +109,8 @@ namespace automaionTask1
             PasswordField.Click();
             PasswordField.Clear();
             PasswordField.SendKeys(Password);
+            SubmitLoginButton.Click();
+            driver.SwitchTo().DefaultContent();
         }
     }
 }

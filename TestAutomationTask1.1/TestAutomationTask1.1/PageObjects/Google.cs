@@ -22,13 +22,13 @@ namespace automaionTask1
     {
         public Google(IWebDriver driver) : base(driver) { }
 
-        public override string  folderWithScreenshots { get => base.folderWithScreenshots; } 
-        protected override string stringToSearch { get=>"Банк";}
+        public override string folderWithScreenshots => base.folderWithScreenshots;
+        protected override string stringToSearch =>"Банк";
         protected override string xpathOfSearchedElement { get => "//*[contains(text(),'MTB БАНК')]"; }
-        protected override string currentUrl { get => "https://www.google.com/"; }
+        protected override string currentUrl  => "https://www.google.com/";
         protected override string xpathOfPageNumber => "//*[@class='cur']";
         protected override IWebElement SearchField => driver.FindElement(By.XPath("//*[@id='searchform']//input[@type='text']"));
-        protected override IWebElement NextPageButton { get => driver.FindElement(By.XPath("//*[@id='pnnext']")); }
+        protected override IWebElement NextPageButton => driver.FindElement(By.XPath("//*[@id='pnnext']")); 
         protected override string xpathOfNextPageButton => "//*[@id='pnnext']";
 
         public void FindElement()
@@ -36,7 +36,6 @@ namespace automaionTask1
             SearchText();
             SearchElement(xpathOfPageNumber);
         }
-
         public void TakeScreen()
         {
             SetTheDirectoryWithSaves();

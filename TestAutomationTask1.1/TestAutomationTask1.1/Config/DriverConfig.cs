@@ -27,6 +27,5 @@ namespace automaionTask1
                 DriverTypes.Firefox => (IWebDriver)new FirefoxDriver(),
                 _ => new ChromeDriver()
             };
-     
     }
 }
