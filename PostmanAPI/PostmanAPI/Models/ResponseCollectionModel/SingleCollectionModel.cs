@@ -6,7 +6,7 @@ namespace PostmanAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public long Owner { get; set; }
-        public string Uid { get; set; }
+        public string Uid { get; set; } 
 
     }
 }

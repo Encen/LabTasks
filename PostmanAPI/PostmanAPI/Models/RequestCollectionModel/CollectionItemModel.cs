@@ -6,10 +6,10 @@ namespace PostmanAPI.Models
     public class CollectionsOfItems
     {
         public string Name { get; set; }
-        public List<CollectionItemModel> Item { get; set; }
+        public List<CollectionOfItems> Item { get; set; }
         public RequestCollectionModel Request { get; set; }
     }
-    public class CollectionItemModel
+    public class CollectionOfItems
     {
         public string Name { get; set; }
         public RequestCollectionModel Request { get; set; }

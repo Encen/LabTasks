@@ -8,17 +8,16 @@ Scenario: 01 Get the list of existing collections
 	When I send GET request to postman collections api
 	Then I get the list of my collections
 
-	Scenario: 02 Create new collection 
-	
+Scenario: 02 Create new collection 
 	When I send POST request to postman collections api
 	Then New collection will be created
 
-	Scenario: 03 Update existing collection
+Scenario: 03 Update existing collection
 	Given I have a collection with name TEST
 	When I send PUT request to postman collections api with new Name
 	Then The collection will be renamed
 
-	Scenario: 04 Get the list of existing collections 
-	Given I have a collection
+Scenario: 04 Get the list of existing collections 
+	Given I have a collection with name TEST
 	When I send DELETE request to postman collections api
 	Then The collection will be deleted 

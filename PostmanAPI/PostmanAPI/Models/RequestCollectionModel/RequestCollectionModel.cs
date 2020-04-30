@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PostmanAPI.Models
 {
     public class RequestCollectionModel
     {
-        public Uri Url { get; set; }
+        public Url Url { get; set; }
         public string Method { get; set; }
-        public Header[] Header { get; set; }
+        public List<Header> Header { get; set; }
         public Body Body { get; set; }
         public string Description { get; set; }
     }
-
+    public class Url
+    {
+        public string raw { get; set; }
+        public string protocol { get; set; }
+        public List<string> host { get; set; }
+        public List<string> path { get; set; }
+    }
     public class Body
     {
         public string Mode { get; set; }

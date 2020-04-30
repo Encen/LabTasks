@@ -6,6 +6,7 @@ namespace PostmanAPI.Models
     {   
         public string Name { get; set; }
         public string Description { get; set; }
-        public Uri Schema { get; set; }
+        public string Postman_id { get; set; }
+        public string Schema { get; set; }
     }
 }

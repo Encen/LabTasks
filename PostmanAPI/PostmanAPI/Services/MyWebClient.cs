@@ -2,7 +2,7 @@
 
 namespace PostmanAPI.Services
 {
-    public class MyWebClient:WebClient
+    public class MyWebClient : WebClient
     {
     }
 }

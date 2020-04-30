@@ -6,42 +6,37 @@ namespace PostmanAPI.Services
     {
         public MyWebClient _webClient;
 
-        protected WebClientRequestBase(string baseUrl,string token)
+        protected WebClientRequestBase(string xApiKey)
         {
             _webClient = new MyWebClient();
-            _webClient.BaseAddress = baseUrl;
-            _webClient.Headers.Add("x-api-key", token);
+            _webClient.Headers.Add("x-api-key",xApiKey);
+            _webClient.Headers.Add("Content-type", "application/json");
         }
         protected T Deserialize<T>(string data)
-        {
-            return JsonConvert.DeserializeObject<T>(data);
-        }
-        protected T Get<T>(string resourceEndpoint)where T:class
+            =>JsonConvert.DeserializeObject<T>(data);
+        public enum RequestTypes
+            {
+                POST,
+                PUT,
+                DELETE
+            }
+        protected T Get<T>(string resourceEndpoint)where T : class
         {
             var response = _webClient.DownloadString(resourceEndpoint);
             T deserializedResponse = Deserialize<T>(response);
             return deserializedResponse;
         }
-        protected T Post<T>(string resourceEndpoint,string data) where T:class
+        protected T RequestType<T>(string resourceEndpoint,string data,RequestTypes request) where T : class
         {
+            if(request == RequestTypes.DELETE)
+            {
+                data = "";
+            }
             _webClient.Headers.Add("Content-Type", "application/json");
-            var response = _webClient.UploadString(resourceEndpoint,"POST", data);
+            var response = _webClient.UploadString(resourceEndpoint,request.ToString(), data);
             T deserializedResponse = Deserialize<T>(response);
             return deserializedResponse;
         }
-        protected T Put<T>(string resourceEndpoint, string data) where T : class
-        {
-            _webClient.Headers.Add("Content-Type", "application/json");
-            var response = _webClient.UploadString(resourceEndpoint, "PUT", data);
-            T deserializedResponse = Deserialize<T>(response);
-            return deserializedResponse;
-        }
-        protected T Delete<T>(string resourceEndpoint, string data="") where T : class
-        {
-            _webClient.Headers.Add("Content-Type", "application/json");
-            var response = _webClient.UploadString(resourceEndpoint, "DELETE", data);
-            T deserializedResponse = Deserialize<T>(response);
-            return deserializedResponse;
-        }
+      
     }
 }
